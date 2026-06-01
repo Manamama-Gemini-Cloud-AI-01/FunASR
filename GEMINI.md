@@ -69,3 +69,7 @@ These components remain the gold standard for FunASR pipelines:
 2. **`funasr/campplus`**: For speaker identity.
 3. **Configuration Rule**: **Always** use `hub="hf"`, `trust_remote_code=True`, and manually force `model_hub="hf"` in `vad_kwargs`.
 4. **vLLM Integration**: For production scale on NVIDIA GPUs, use `AutoModelVLLM`. vLLM solves the "Time" problem, while larger parameter counts (7B+) solve the "Quality" problem.
+
+## 🏗️ Pull Request Status (June 2026)
+* **PR #2957 (CPU Support for Real-time Server):** Closed and Merged. Implemented initial CPU bypass in `serve_realtime_ws.py`.
+* **PR #2958 (Robust CPU Support for Demos):** Active/Open. Contains critical CPU-fallback logic for `demo_vllm.py` and API signature compatibility fixes to ensure stability across both CPU (AutoModel) and GPU (vLLM) modes.
