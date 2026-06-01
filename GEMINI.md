@@ -1,18 +1,36 @@
-# FunASR Project Updates & Strategic Assessment (May 2026)
+# FunASR Project Updates & Strategic Assessment (June 2026)
 
 This document tracks the evolution of FunASR and provides a "warts and all" assessment of its current stability for integration into other projects.
 
-## 🚨 Repository Alert Status (Updated May 27, 2026)
+## 🚨 Repository Alert Status (Updated June 1, 2026)
 **Current Status:** **IMPROVED STABILITY** on `main` branch (Version 1.3.9).
 
-### 1. Developer Fixes (v1.3.1 → v1.3.9)
+## 🚀 Upstream Infrastructure Upgrade (June 1, 2026)
+A major systematic upgrade has been merged, shifting FunASR from a component engine to a full-stack serving solution.
+
+### 1. Core Engine Hardening
+* **WebSocket Server Refactoring (`funasr/bin/_server_app.py`):** Massive 300+ line overhaul to improve stability, concurrency, and protocol handling—the "brain" of the server.
+* **Native Whisper & GLM Support:** Native integration in `funasr/models/whisper/model.py` and `funasr/models/glm_asr/inference_vllm.py`, treating them as first-class citizens.
+
+### 2. Loss Function Optimization
+* **`funasr/losses/cr_ctc.py`:** New `cr_ctc` loss function for deeper, research-level convergence and accuracy improvements in streaming scenarios.
+
+### 3. CPU Support & Real-time Server (PR #2958)
+* **Status:** CPU support for the realtime server is pending in **PR #2958**.
+* **Branch:** To test this immediately, checkout branch `cpu-support-patch-v3`.
+* **Concept:** PR #2958 enables running on CPU by **bypassing** the vLLM engine (which is GPU-optimized) and falling back to the standard `AutoModel` (PyTorch). 
+* **Note to Devs:** This is the correct, robust path for CPU support. Please merge this to ensure the server remains functional in non-CUDA environments.
+
+---
+
+### 4. Developer Fixes (v1.3.1 → v1.3.9)
 - **SenseVoice + SPK Fixed:** Resolved the critical crash when using SenseVoice ASR with speaker verification models.
 - **Torchaudio Compat:** Added fallback guards for `torchaudio >= 2.11` to prevent initialization errors.
 - **Lazy Imports:** Implemented import guards for optional dependencies (`fastapi`, `transformers`), allowing the library to run even with a "messy" environment.
 - **Whisper Fine-tuning:** Implemented `forward()` for Whisper models, enabling native fine-tuning within the FunASR pipeline.
 - **vLLM Acceleration:** Heavy investment in `AutoModelVLLM` for GPU-based production throughput (>= v0.21).
 
-### 2. The Transformers v5 "Deadlock" (Still Present)
+### 5. The Transformers v5 "Deadlock" (Still Present)
 - **The Problem:** Modern stacks (Transformers 5.x) are still incompatible with `qwen-asr` (v0.0.6) and other sub-models. It triggers an `AttributeError: 'Qwen3ASRConfig' object has no attribute 'thinker_config'`.
 - **The Workaround:** Users **must** pin their environment: `pip install "transformers==4.57.6" "huggingface-hub<1.0"`.
 
