@@ -72,4 +72,10 @@ These components remain the gold standard for FunASR pipelines:
 
 ## 🏗️ Pull Request Status (June 2026)
 * **PR #2957 (CPU Support for Real-time Server):** Closed and Merged. Implemented initial CPU bypass in `serve_realtime_ws.py`.
-* **PR #2958 (Robust CPU Support for Demos):** Active/Open. Contains critical CPU-fallback logic for `demo_vllm.py` and API signature compatibility fixes to ensure stability across both CPU (AutoModel) and GPU (vLLM) modes.
+## Known Limitations & Workarounds (June 2026)
+
+- **CLI Hub Selection:** The `funasr` CLI currently hardcodes the model hub to `ms` (ModelScope). It does not support `FUNASR_HUB` environment variables or `--hub` CLI arguments.
+  - *Workaround:* See Issue #3045 for the feature request to add this. Currently, you must use the Python `AutoModel` API directly.
+- **Qwen3 ASR Usage:** Qwen3 models are not mapped in the CLI's `MODEL_CONFIGS` dictionary in `funasr/cli.py`.
+  - *Workaround:* Use the `AutoModel` API with `hub="hf"` to load `Qwen/Qwen3-ASR-1.7B` directly in a Python script (e.g., `run_qwen3.py`).
+
